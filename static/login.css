@@ -96,6 +96,11 @@ button {
     color: black;
     font-size: 25px;
     text-align: center;    
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: gray;    
 }
 
 .button_text {
