@@ -5,7 +5,7 @@
 from flask import Flask, render_template,request,redirect,url_for
 from flask_login import LoginManager,UserMixin,login_required,login_user,logout_user
 from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,EmailField,SubmitField,validators
+from wtforms import StringField,SubmitField,validators
 import os
 import datetime
 
