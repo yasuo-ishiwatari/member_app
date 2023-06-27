@@ -4,6 +4,8 @@
 # flask run
 from flask import Flask, render_template,request,redirect,url_for
 from flask_login import LoginManager,UserMixin,login_required,login_user,logout_user
+from flask_wtf import FlaskForm
+from wtforms import StringField,PasswordField,EmailField,SubmitField,validators
 import os
 import datetime
 
@@ -79,10 +81,10 @@ class User(UserMixin):
 def user_loader(user_id):
     return User(user_id)        
 
-class User(UserMixin):
-    def __init__(self, uid):
-        self.id = uid
-
+class LoginForm(FlaskForm):
+    name = StringField('ユーザー名',validators=[validators.DataRequired()],id='username',name='username',default='ユーザー名')
+    password = StringField('パスワード',validators=[validators.DataRequired()],id='password',name='password',default='パスワード')
+    submit = SubmitField('ログイン')
 
 def clear_profile():
     global register_info    
@@ -103,56 +105,64 @@ def index():
 
 @app.route('/general',methods=['GET','POST'])
 def general_person():
+    form = LoginForm()
     if request.method == 'GET':
-        return render_template('login.html',SignUp = True)
+        return render_template('login.html',SignUp = True,form = form)
     else:
-        username = request.form.get('username')
-        password = request.form.get('password')
-        print(username,password)
+        if form.validate_on_submit():
+            username = request.form.get('username')
+            password = request.form.get('password')
+            print(username,password)
 
-        if username == ADMIN_USER_NAME:
-            return render_template('login.html',SignUp = True)
+            if username == ADMIN_USER_NAME:
+                return render_template('login.html',SignUp = True,form = form)
 
-        res = check_account(username,password)
-        if res == False:
-            return render_template('login.html',SignUp = True)
-        print("login success")
-        global loginUser
-        loginUser = username
+            res = check_account(username,password)
+            if res == False:
+                return render_template('login.html',SignUp = True,form = form)
+            print("login success")
+            global loginUser
+            loginUser = username
         
-        user = User(username) 
-        login_user(user) 
+            user = User(username) 
+            login_user(user) 
         
-        if get_profile_member(username) == None:
-            clear_profile()
-            return redirect(url_for("register"))            
-        print("profile exist")
-        # return render_template('info.html')
-        return redirect(url_for("info"))
+            if get_profile_member(username) == None:
+                clear_profile()
+                return redirect(url_for("register"))            
+            print("profile exist")
+            return redirect(url_for("info"))
+        else:
+            return render_template('login.html',SignUp = True,form = form)
 
 @app.route('/admin',methods=['GET','POST'])
 def admin_person():
+    form = LoginForm()
     if request.method == 'GET':
-        return render_template('login.html',SignUp = False)
+        return render_template('login.html',SignUp = False, form = form )
     else:
-        username = request.form.get('username')
-        password = request.form.get('password')
-        print(username,password)
+        if form.validate_on_submit():
+            username = request.form.get('username')
+            password = request.form.get('password')
+            print(username,password)
 
+            if username != ADMIN_USER_NAME:
+                return render_template('login.html',SignUp = False, form = form)
 
-        global loginUser
-        loginUser = username
-        
-        user = User(username) 
-        login_user(user)
+            if check_account(username,password) == False:
+                return render_template('login.html',SignUp = False, form = form)
+            print("login success")
+            global loginUser
+            loginUser = username
 
-        if username != ADMIN_USER_NAME:
-            return render_template('login.html',SignUp = False)
+            user = User(username) 
+            login_user(user)
 
-        if check_account(username,password) == False:
-            return render_template('login.html',SignUp = False)
-        else:
             return redirect(url_for("record"))
+        
+        else:
+            return render_template('login.html',SignUp = False, form = form )
+
 
 @app.route('/returntop')
 def return_top():
@@ -174,8 +184,6 @@ def signup():
 
         clear_profile()
         return redirect(url_for("general_person"))
-        
-            
 
 @app.route('/returnlogin')
 def return_login():

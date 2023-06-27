@@ -5,12 +5,19 @@ from werkzeug.security import generate_password_hash,check_password_hash
 connection = None
 cursor = None
 
+# DB_USER = "admin"
+# DB_PASSWORD = "pass"
+# DB_HOST = "127.0.0.1"
+# DB_PORT = 5432
+# DB_NAME = "memberdb"
+
 DB_USER = "admin"
 DB_PASSWORD = "uuPaLpJodCbahwbi6QbUk1n3VRYZCqHU"
 DB_HOST = "dpg-ch9meid269v0obb7h8q0-a"
-
 DB_PORT = 5432
 DB_NAME = "memberdb_t8wb"
+
+
 
 ACCOUNT_TABLE = "account_table"
 PROFILE_TABLE = "prof_table"
@@ -23,7 +30,6 @@ MAX_PASSWORD_ACCOUNT = 128
 
 MALE_BIT = B'1'
 FEMALE_BIT = B'0'
-
 
 
 

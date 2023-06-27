@@ -87,6 +87,7 @@ input {
     width: 100%;
 }
 
+.login_area input,
 button {
     height: 40px;
     width:  300px;
@@ -99,6 +100,9 @@ button {
     cursor: pointer;
 }
 
+.login_area input:hover{
+    background-color: gray;     
+}
 button:hover {
     background-color: gray;    
 }

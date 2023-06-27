@@ -22,18 +22,19 @@
         </header>
         <main>
             <form action="" method="POST">
+                {{ form.csrf_token }}
                 <div class="input_area">
                     <div class="each_input flex_area">
-                        <input type="text" id="username" name="username" value="ユーザー名">
+                        {{form.name}}
                     </div>
                     <div class="each_input flex_area">
-                        <input type="text" id="password" name="password" value="パスワード">
+                        {{form.password}}
                     </div>
                 </div>
                 <div class="btn_area">
                     <div class="each_btn1 flex_area">
                         <div class="login_area">
-                            <button type="submit">ログイン</button>
+                            {{ form.submit}}
                         </div>
                     </div>
                     <div class="each_btn2 flex_area">
